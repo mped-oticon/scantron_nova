@@ -1,0 +1,62 @@
+# Keep private and secret information separate
+source secrets.source
+
+
+# Just some user-agent, it seems Scantron requires something looking like a real browser
+export USER_AGENT="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"
+
+
+# Loging and obtain an ephemeral auth token for further API access
+function scantron_login_token {
+    curl -s "${SCANTRON_URL_BASE}/bin/sysfcgi.fx" \
+      -H "Connection: keep-alive" \
+      -H "Pragma: no-cache" \
+      -H "Cache-Control: no-cache" \
+      -H "Accept: text/html, */*; q=0.01" \
+      -H "DNT: 1" \
+      -H "Session-Pc: 102" \
+      -H "X-Requested-With: XMLHttpRequest" \
+      -H "Session-ID: 0" \
+      -H "User-Agent: ${USER_AGENT}" \
+      -H "Content-Type: application/x-www-form-urlencoded; charset=UTF-8" \
+      -H "Sec-GPC: 1" \
+      -H "Origin: ${SCANTRON_URL_BASE}" \
+      -H "Referer: ${SCANTRON_URL_BASE}/app/" \
+      -H "Accept-Language: en-US,en-DK;q=0.9,en;q=0.8,da-DK;q=0.7,da;q=0.6,pt-BR;q=0.5,pt;q=0.4" \
+      -H "Cookie: activeLangId=English; isStackableDevice=false" \
+      --data-raw $"<requests><request name=\"LoginUser\"><param name=\"UsrName\" value=\"${SCANTRON_USER}\"/><param name=\"UsrPassword\" value=\"${SCANTRON_PASS}\"/></request></requests>" \
+      --compressed \
+      --insecure \
+    | xpath -q -e '//SessionID/text()' 
+}
+
+
+# Open a specific door, given auth token
+function scantron_open_door_176 {
+    local access_token="$1"
+
+    curl -s "${SCANTRON_URL_BASE}/bin/sysfcgi.fx" \
+      -H "Connection: keep-alive" \
+      -H "Pragma: no-cache" \
+      -H "Cache-Control: no-cache" \
+      -H "Accept: text/html, */*; q=0.01" \
+      -H "DNT: 1" \
+      -H "Session-Pc: 102" \
+      -H "X-Requested-With: XMLHttpRequest" \
+      -H "Session-ID: ${access_token}" \
+      -H "User-Agent: ${USER_AGENT}" \
+      -H "Content-Type: application/x-www-form-urlencoded; charset=UTF-8" \
+      -H "Sec-GPC: 1" \
+      -H "Origin: ${SCANTRON_URL_BASE}" \
+      -H "Referer: ${SCANTRON_URL_BASE}/app/" \
+      -H "Accept-Language: en-US,en-DK;q=0.9,en;q=0.8,da-DK;q=0.7,da;q=0.6,pt-BR;q=0.5,pt;q=0.4" \
+      --data-raw '<requests><request name="ExecuteFunction"><param name="HwID" value="176"/><param name="Remarks" value=" "/><param name="Function" value="Open"/></request></requests>' \
+      --compressed \
+      --insecure
+}
+
+
+# Open door, first obtaining auth token
+function open_door_sb95 {
+    scantron_open_door_176 "$(scantron_login_token)"
+}

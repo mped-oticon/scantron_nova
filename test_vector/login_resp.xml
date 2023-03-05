@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<responses>
+<response name="LoginUser" status="0" message="OK.">
+<data>
+<SessionID>34d27c72-522d-4292-bdc7-e5eda7e71acb</SessionID>
+<UsrAccessLevel>1000</UsrAccessLevel>
+<UsrID>2</UsrID>
+<ApplicationType>Nova100</ApplicationType>
+<ApplicationTypeID>3</ApplicationTypeID>
+<HostMAC>00:50:c2:e6:3a:57</HostMAC>
+<ReplicatorVersion>3.0.27</ReplicatorVersion>
+<SysHwRWXVersion>3.0.27</SysHwRWXVersion>
+<SysFCGIVersion>3.0.27</SysFCGIVersion>
+<PythonVersion>2.6.6</PythonVersion>
+<ProxyVersion>-1</ProxyVersion>
+<SystemRegistered>1</SystemRegistered>
+<DaysLeft>30</DaysLeft>
+<UniqueID>2352ae71-140b-46db-9ccd-b00f1663bfbf</UniqueID>
+<SslMode></SslMode>
+<FileSystemRevision>1</FileSystemRevision>
+<ProtectedCardCreation>false</ProtectedCardCreation>
+<RedundantMasterControllerID>0</RedundantMasterControllerID>
+<RedundantSlaveControllerID>0</RedundantSlaveControllerID>
+<HostControllerID>1</HostControllerID>
+</data>
+</response>
+</responses>
+
